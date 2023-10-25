@@ -1,0 +1,124 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+
+<nav id="navbarExample" class="navbar navbar-expand-lg fixed-top navbar-dark" aria-label="Main navigation">
+    <div class="container col-md-12 col-lg-12">
+
+        <a (click)="sidenav.toggle()"><img id="logo"
+                src="https://dl.hiapphere.com/data/thumb/202101/com.tasks.android_HiAppHere_com_icon.png"
+                alt="logo"></a>
+        <a class="navbar-brand logo-text" style="color: white;">todo</a>
+
+        <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse offcanvas-collapse " id="navbarsExampleDefault">
+            <ul class="navbar-nav ms-auto navbar-nav-scroll">
+
+                <li class="nav-item">
+                    <h1 style=" color: white; text-transform: uppercase; margin-top: 5%;font-family:consolas;">WELCOME
+                        {{userData.username}}</h1>
+                </li>
+                <li class="nav-item">
+                    <button mat-button (click)="enableAutoCompletion()"
+                        style=" color: rgb(252, 230, 230); text-transform: uppercase; margin-top: 10%;">
+                        <mat-icon class="material-icons-outlined" color="white">filter_list_off</mat-icon>
+                    </button>
+
+                    <button mat-button [matMenuTriggerFor]="beforeMenu2"
+                        style=" color: rgb(255, 230, 230); text-transform: uppercase; margin-top: 10%;">
+                        <mat-icon matBadge={{message3.length}} matBadgeColor="primary" color="white">notifications
+                        </mat-icon>
+                    </button>
+
+                    <mat-menu #beforeMenu2="matMenu" yPosition="below" style="width: 200%;">
+                        &nbsp;&nbsp; All Past Tasks <mat-option *ngFor=" let message of message3">
+                            {{message.taskTitle}}
+                        </mat-option>
+                        &nbsp;are completed. &nbsp;&nbsp;
+                    </mat-menu>
+                </li>
+            </ul>
+            <span class="nav-item">
+                <button mat-button [matMenuTriggerFor]="beforeMenu">
+                    <a *ngIf="messages.userImage.length>1000"><img id="logo" src="{{messages.userImage}}"
+                            style="border-radius: 50%;"></a>
+                    <a *ngIf="messages.userImage.length<1000"><img id="logo" src="assets/images/default.png"
+                            style="border-radius: 50%;"></a>
+                </button>
+            </span>
+        </div>
+    </div>
+</nav>
+
+<br> <br> <br> <br>
+
+<mat-menu #beforeMenu="matMenu" yPosition="below">
+    <button mat-raised-button (click)="addProfileImage()" style="max-width: 80%;">
+        <img *ngIf="messages.userImage.length>1000" src="{{messages.userImage}}" width="80%"
+            style="border-radius: 30%; ">
+        <img *ngIf="messages.userImage.length<1000" src="assets/images/default.png" width="30%"
+            style="margin-left: 0%; ">
+        <span>
+            <mat-icon (click)="openDialog()" matTooltip="Change Profile Image">add_a_photo</mat-icon>
+        </span>
+    </button><br> <br>
+    <mat-card-title style="text-align: center;"> {{userData.username}} </mat-card-title>
+   
+    <mat-card-subtitle style="text-align: center;"> {{email}} </mat-card-subtitle>
+
+    <mat-card-title style="text-align: center;">
+        <button mat-button color="primary" matTooltip="Change Password" (click)="openDialogChangePassword()">Change
+            Password</button>
+    </mat-card-title>
+    <br>
+    <mat-card-title style="text-align: center;">
+        <button mat-raised-button color="warn" (click)="logoutUser()" matTooltip="Log Out">Log Out</button>
+    </mat-card-title>
+</mat-menu>
+
+<mat-drawer-container class="example-container" style="background-color: white;">
+    <mat-drawer #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+        (closed)="events.push('close!')" style="background-color: white;width:200px; color:rgb(1, 1, 229);">
+        <br><br>
+        <ul style="list-style-type: none; font-size: 20px; font-weight: bold;">
+            <li (click)="openForm()" matTooltip="Add A New Task">+ Add Task
+            </li>
+            <br>
+            <li mat-raised-button color="primary" matTooltip="Show Tasks" (click)="doRoute()">
+                <mat-icon class="material-icons-outlined">visibility</mat-icon>
+                Show Tasks
+            </li>
+            <br>
+            <li matTooltip="Notes" color="primary" routerLink="notes">
+                <mat-icon class="material-icons-outlined">description</mat-icon>
+                Notes
+            </li>
+            <br>
+            <li matTooltip="Remainder" routerLink="reminder">
+                <mat-icon class="material-icons-outlined">notifications</mat-icon> Remainder
+            </li>
+            <br>
+            <li matTooltip="Archieved Tasks" routerLink="archive">
+                <mat-icon class="material-icons-outlined">archive</mat-icon> Archive
+            </li>
+        </ul>
+
+    </mat-drawer>
+    <mat-drawer-content>
+
+        <ul *ngFor="let data of userData">
+            <li>{{data.taskTitle}}</li>
+            <li>{{data.taskId}}</li>
+            <li>{{data.taskDescription}}</li>
+        </ul>
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+</mat-drawer-container>

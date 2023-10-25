@@ -1,0 +1,44 @@
+<div class="row">
+  <div style="margin-top: 6%; margin-left: 20%;" *ngIf="message=='' || message==null">
+    <img src="assets\Image\TaskReminder.jpeg" alt="No Archieved Task" width="50%" height="100%">
+  </div>
+  <div *ngIf="message==''" style="margin-left: 45%; margin-top: 16%;">
+    <h1>
+      <mat-icon class="material-icons-outlined">notifications</mat-icon>
+      Notes With Upcoming Reminders Appear Here
+    </h1>
+  </div>
+  <mat-card class="example-card"
+    *ngFor="let task of message | paginate:{itemsPerPage:12, currentPage:page, totalItems:totalLength}" matRipple
+    [matRippleCentered]="centered" style="background-color: {{task.taskCardColor}}">
+
+    <mat-card-title> {{task.taskTitle}}
+      <img matTooltip="Priority" src="assets/images/{{task.priority}}.png" alt="" width="10%"
+        style="margin-left: 5%; position: relative" />
+    </mat-card-title>
+
+    <mat-card-subtitle> {{task.taskDescription}} </mat-card-subtitle>
+    <div class="container" *ngIf="task.taskImage.length > 1000" style="position: relative">
+      <img *ngIf="task.taskImage.length > 1000" mat-card-image src="{{ task.taskImage }}" />
+    </div>
+
+    <mat-chip-list matTooltip="Task Category" *ngIf="task.category != ''" #chipList aria-label="Fruit selection">
+      <mat-chip>
+        {{ task.category }}
+      </mat-chip>
+    </mat-chip-list>
+    <br />
+
+    <mat-card-title> {{task.date}} </mat-card-title> <br>
+    <mat-card-title
+      style="color: rgb(255, 0, 0); font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: larger; font-weight: bolder; ">
+      <strong>Reminder: </strong> Today's Task </mat-card-title>
+
+
+
+  </mat-card>
+</div>
+
+<footer class="page-footer">
+  <pagination-controls [hidden]="totalLength<=13" class="text-center" (pageChange)="page=$event"></pagination-controls>
+</footer>
